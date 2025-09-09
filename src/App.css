@@ -1,0 +1,182 @@
+.hero-wrap {
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 1.5rem 8rem;
+  background: #0a0a0a;
+  text-align: center;
+}
+
+.hero-center {
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+.eyebrow {
+  margin-bottom: 1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: #b3b3b3;
+}
+
+.headline {
+  font-weight: 800;
+  line-height: 1.2;
+  font-size: clamp(2rem, 3vw + 1rem, 3.5rem);
+  color: white;
+}
+
+.headline-gradient {
+  background: linear-gradient(90deg, #c4b5fd, #f0abfc, #a5b4fc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subcopy {
+  margin-top: 1.5rem;
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
+  color: #d4d4d4;
+  line-height: 1.6;
+}
+
+.cta-row {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-primary {
+  padding: 0.9rem 1.4rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.35);
+  transition: transform 180ms ease;
+}
+.btn-primary:hover { transform: scale(1.03); }
+
+.btn-ghost {
+  padding: 0.9rem 1.4rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  color: #e5e5e5;
+  border: 1px solid #2a2a2a;
+  backdrop-filter: blur(6px);
+  transition: border-color 180ms ease;
+}
+.btn-ghost:hover { border-color: #4a4a4a; }
+
+.glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.glow-left {
+  top: -160px;
+  left: -160px;
+  width: 460px;
+  height: 460px;
+  background: radial-gradient(closest-side, rgba(139,92,246,0.35), rgba(217,70,239,0.2), transparent);
+}
+.glow-right {
+  right: -120px;
+  bottom: -180px;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(closest-side, rgba(217,70,239,0.28), rgba(99,102,241,0.2), transparent);
+}
+
+/* Education */
+.edu-wrap {
+  padding: 4.5rem 1.25rem;
+  background: #0a0a0a; /* keeps it consistent with hero */
+}
+
+.edu-head {
+  text-align: center;
+  margin: 0 auto 2.5rem;
+}
+
+.edu-title {
+  font-size: clamp(2rem, 2.5vw + 1rem, 3.2rem);
+  font-weight: 800;
+  color: #e5e5e5;
+  letter-spacing: 0.01em;
+}
+
+.edu-underline {
+  display: inline-block;
+  height: 4px;
+  width: 72px;
+  transform-origin: left center;
+  margin-top: 0.5rem;
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+  border-radius: 999px;
+}
+
+.edu-grid {
+  margin: 0 auto;
+  max-width: 1100px;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .edu-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.edu-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 18px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.edu-logo {
+  width: min(360px, 90%);
+  height: auto;
+  margin: 0 auto 1.1rem;
+  display: block;
+}
+
+.edu-school {
+  font-size: clamp(1.1rem, 1.3vw + 0.8rem, 1.6rem);
+  color: #f5f5f5;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.edu-degree {
+  color: #d4d4d4;
+  margin-bottom: 0.25rem;
+  line-height: 1.5;
+}
+
+.edu-location {
+  color: #a3a3a3;
+  font-weight: 500;
+  margin-top: 0.3rem;
+}
+
+@keyframes blob {
+  0%   { transform: translate(0px, 0px) scale(1); }
+  33%  { transform: translate(10px, -20px) scale(1.05); }
+  66%  { transform: translate(-20px, 10px) scale(0.98); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+.animate-blob { animation: blob 14s ease-in-out infinite; }
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+
+@keyframes shine {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
+}
