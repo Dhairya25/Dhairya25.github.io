@@ -7,7 +7,8 @@ import { FileTree } from "./file-tree";
 
 export function TitleBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { exitIDE } = useMode();
+  const { setMode: switchMode } = useMode();
+  const exitIDE = () => switchMode("editorial");
 
   return (
     <>

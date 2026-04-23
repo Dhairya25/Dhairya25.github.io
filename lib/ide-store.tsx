@@ -1,11 +1,11 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
-import { type FileEntry, getFile } from "./file-registry";
+import { getFileById, type VirtualFile } from "./ide-files";
 
 export interface FileTab {
   id: string;
-  file: FileEntry;
+  file: VirtualFile;
 }
 
 interface IDEState {
@@ -30,15 +30,15 @@ export function useIDE(): IDEState {
 
 export function IDEStoreProvider({ children }: { children: ReactNode }) {
   const [openTabs, setOpenTabs] = useState<FileTab[]>(() => {
-    const readme = getFile("readme");
-    return readme ? [{ id: "readme", file: readme }] : [];
+    const readme = getFileById("root-readme");
+    return readme ? [{ id: "root-readme", file: readme }] : [];
   });
-  const [activeTab, setActiveTabState] = useState<string | null>("readme");
+  const [activeTab, setActiveTabState] = useState<string | null>("root-readme");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [terminalOpen, setTerminalOpen] = useState(true);
+  const [terminalOpen, setTerminalOpen] = useState(false);
 
   const openFile = useCallback((id: string) => {
-    const file = getFile(id);
+    const file = getFileById(id);
     if (!file) return;
 
     setOpenTabs((prev) => {
@@ -55,7 +55,6 @@ export function IDEStoreProvider({ children }: { children: ReactNode }) {
       if (idx === -1) return prev;
       const next = prev.filter((t) => t.id !== id);
 
-      // If closing the active tab, switch to adjacent
       setActiveTabState((currentActive) => {
         if (currentActive !== id) return currentActive;
         if (next.length === 0) return null;

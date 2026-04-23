@@ -5,68 +5,77 @@ const config: Config = {
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./lib/**/*.{ts,tsx}",
+    "./data/**/*.{ts,tsx}",
   ],
-  darkMode: "class",
   theme: {
     extend: {
       colors: {
         bg: "var(--bg)",
-        surface: "var(--surface)",
-        border: "var(--border)",
-        text: "var(--text)",
-        muted: "var(--muted)",
+        fg: "var(--fg)",
+        "fg-secondary": "var(--fg-secondary)",
         accent: "var(--accent)",
-        purple: "var(--purple)",
+        rule: "var(--rule)",
+        "border-color": "var(--border-color)",
+        // IDE-specific
+        "ide-sidebar": "var(--ide-sidebar)",
+        "ide-panel": "var(--ide-panel)",
+        "ide-string": "var(--ide-string)",
+        "ide-keyword": "var(--ide-keyword)",
+        "ide-func": "var(--ide-func)",
+        "ide-status": "var(--ide-status)",
+        // Terminal-specific
+        "term-panel": "var(--term-panel)",
+        "term-green": "var(--term-green)",
+        "term-red": "var(--term-red)",
+        "term-white": "var(--term-white)",
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-fraunces)", "Georgia", "serif"],
+        serif: ["var(--font-source-serif)", "Georgia", "serif"],
+        sans: ["var(--font-inter-tight)", "system-ui", "sans-serif"],
         mono: ["var(--font-jetbrains-mono)", "monospace"],
-      },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-accent": "linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa)",
+        "mono-terminal": ["var(--font-ibm-plex-mono)", "monospace"],
       },
       fontSize: {
-        display: [
-          "clamp(3rem, 7vw + 1rem, 6rem)",
-          { lineHeight: "1", letterSpacing: "-0.04em", fontWeight: "700" },
-        ],
-      },
-      transitionTimingFunction: {
-        cinematic: "cubic-bezier(0.22, 1, 0.36, 1)",
-        spring: "cubic-bezier(0.34, 1.56, 0.64, 1)",
-      },
-      boxShadow: {
-        soft: "0 2px 8px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.06)",
-        lifted: "0 8px 30px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)",
-        glow: "0 0 20px rgba(99,102,241,0.15), 0 0 60px rgba(99,102,241,0.08)",
+        // 1.25 ratio type scale
+        "scale-1": ["0.75rem", { lineHeight: "1.6" }],     // 12px
+        "scale-2": ["0.9375rem", { lineHeight: "1.6" }],   // 15px
+        "scale-3": ["1.1875rem", { lineHeight: "1.6" }],   // 19px
+        "scale-4": ["1.5rem", { lineHeight: "1.4" }],      // 24px
+        "scale-5": ["1.875rem", { lineHeight: "1.3" }],    // 30px
+        "scale-6": ["2.375rem", { lineHeight: "1.15" }],   // 38px
+        "scale-7": ["3rem", { lineHeight: "1.05" }],       // 48px
+        "scale-8": ["3.75rem", { lineHeight: "1.05" }],    // 60px
+        "scale-9": ["4.75rem", { lineHeight: "1.05" }],    // 76px
+        // Terminal sizes
+        "term-xs": ["0.625rem", { lineHeight: "1.4" }],    // 10px
+        "term-sm": ["0.75rem", { lineHeight: "1.4" }],     // 12px
+        "term-base": ["0.8125rem", { lineHeight: "1.4" }], // 13px
+        "term-lg": ["0.9375rem", { lineHeight: "1.4" }],   // 15px
       },
       keyframes: {
-        "fade-in": {
-          from: { opacity: "0", transform: "translateY(12px)" },
+        "fade-in-up": {
+          from: { opacity: "0", transform: "translateY(8px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
-        blink: {
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        "cursor-blink": {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0" },
         },
-        grain: {
-          "0%, 100%": { transform: "translate(0, 0)" },
-          "10%": { transform: "translate(-5%, -10%)" },
-          "20%": { transform: "translate(-15%, 5%)" },
-          "30%": { transform: "translate(7%, -25%)" },
-          "40%": { transform: "translate(-5%, 25%)" },
-          "50%": { transform: "translate(-15%, 10%)" },
-          "60%": { transform: "translate(15%, 0%)" },
-          "70%": { transform: "translate(0%, 15%)" },
-          "80%": { transform: "translate(3%, 35%)" },
-          "90%": { transform: "translate(-10%, 10%)" },
+        ticker: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
         },
       },
       animation: {
-        "fade-in": "fade-in 0.6s ease forwards",
-        blink: "blink 1s step-end infinite",
-        grain: "grain 8s steps(10) infinite",
+        "fade-in-up": "fade-in-up 0.4s ease-out forwards",
+        "fade-in": "fade-in 0.25s ease-out forwards",
+        "cursor-blink": "cursor-blink 1.1s step-end infinite",
+        ticker: "ticker 30s linear infinite",
       },
     },
   },

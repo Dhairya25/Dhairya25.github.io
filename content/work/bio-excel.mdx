@@ -1,0 +1,21 @@
+# Bio-Excel Pharma
+
+**Role:** Software Developer Intern
+**Period:** March 2025 to November 2025
+**Stack:** Python, SQL, REST APIs
+
+## What I did
+
+Bio-Excel needed their CRM to work harder. I refactored the database layer, built ETL pipelines, and integrated the APIs that connect their sales and inventory systems.
+
+## Database refactoring
+
+The CRM's relational database was the core issue. Queries against invoicing, purchase order, and inventory tables were slow. I restructured the SQL schema, rewrote the heaviest queries, and built proper indexing strategies. The result was noticeably lower lookup latency across the tables that sales and ops hit most.
+
+## ETL pipelines
+
+Data between the CRM and the sales system was being synced manually. I built Python-based ETL pipelines that automated the synchronization, eliminated redundant manual entry, and enforced record integrity at each step. When a sales record updated, the CRM reflected it without someone copying values between tabs.
+
+## API integration
+
+The sales pipeline and inventory management ran on separate backend services with no clean data flow between them. I integrated REST APIs across the stack so that changes in one system propagated to the other. This improved end-to-end data consistency and cut the reconciliation errors that the team was spending hours on each week.

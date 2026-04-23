@@ -1,7 +1,6 @@
 "use client";
 
 import { useIDE } from "@/lib/ide-store";
-import { useTheme } from "@/components/theme-provider";
 
 const FILES_ICON = (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -51,14 +50,13 @@ interface ActivityItem {
 
 export function ActivityBar() {
   const { sidebarOpen, toggleSidebar } = useIDE();
-  const { toggle: toggleTheme } = useTheme();
 
   const items: ActivityItem[] = [
     { id: "files", icon: FILES_ICON, label: "Explorer", onClick: toggleSidebar },
     { id: "search", icon: SEARCH_ICON, label: "Search", onClick: () => {} },
     { id: "git", icon: GIT_ICON, label: "Source Control", onClick: () => {} },
     { id: "extensions", icon: EXTENSIONS_ICON, label: "Extensions", onClick: () => {} },
-    { id: "settings", icon: SETTINGS_ICON, label: "Settings", onClick: toggleTheme, position: "bottom" },
+    { id: "settings", icon: SETTINGS_ICON, label: "Settings", onClick: () => {}, position: "bottom" },
   ];
 
   const topItems = items.filter((i) => i.position !== "bottom");

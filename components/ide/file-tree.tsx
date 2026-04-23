@@ -1,161 +1,109 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useIDE } from "@/lib/ide-store";
-import { getFilesByFolder, ICON_COLORS, type FileEntry, type FileIcon } from "@/lib/file-registry";
+import { fileTree, isFolder, isFile, type TreeNode, type VirtualFolder, type VirtualFile } from "@/lib/ide-files";
 
-function FileIconSvg({ icon }: { icon: FileIcon }) {
-  const color = ICON_COLORS[icon];
+const FILE_ICON_COLORS: Record<string, string> = {
+  md: "#519aba",
+  ts: "#3178c6",
+  tsx: "#61dafb",
+  py: "#3572a5",
+  vba: "#867db1",
+  ps1: "#012456",
+  json: "#cbcb41",
+};
 
-  if (icon === "markdown") {
-    return (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill={color}>
-        <path d="M2 2h12v12H2V2zm1.5 9V5h1.5l1.5 2 1.5-2H9.5v6H8V7.5L6.5 9.5 5 7.5V11H3.5zm8 0L9 8.5h1.5V5h1.5v3.5H13.5L11.5 11z" />
-      </svg>
-    );
-  }
+function getIconColor(name: string): string {
+  const ext = name.split(".").pop() || "";
+  return FILE_ICON_COLORS[ext] || "#a6a6a6";
+}
 
-  if (icon === "typescript") {
-    return (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-        <rect x="1" y="1" width="14" height="14" rx="2" fill={color} />
-        <text x="8" y="12" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold" fontFamily="monospace">TS</text>
-      </svg>
-    );
-  }
+function FolderNode({ folder, depth }: { folder: VirtualFolder; depth: number }) {
+  const [expanded, setExpanded] = useState(folder.expanded ?? false);
 
-  if (icon === "react") {
-    return (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill={color}>
-        <circle cx="8" cy="8" r="1.5" />
-        <ellipse cx="8" cy="8" rx="7" ry="3" fill="none" stroke={color} strokeWidth="0.8" />
-        <ellipse cx="8" cy="8" rx="7" ry="3" fill="none" stroke={color} strokeWidth="0.8" transform="rotate(60 8 8)" />
-        <ellipse cx="8" cy="8" rx="7" ry="3" fill="none" stroke={color} strokeWidth="0.8" transform="rotate(120 8 8)" />
-      </svg>
-    );
-  }
-
-  if (icon === "json") {
-    return (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-        <rect x="1" y="1" width="14" height="14" rx="2" fill="transparent" stroke={color} strokeWidth="1" />
-        <text x="8" y="11.5" textAnchor="middle" fill={color} fontSize="7" fontWeight="bold" fontFamily="monospace">{"{}"}</text>
-      </svg>
-    );
-  }
-
-  // text
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5">
-      <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-7-7Z" />
-      <path d="M13 2v7h7" />
-    </svg>
+    <div>
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center gap-1 py-[2px] hover:bg-[#2a2d2e] text-[13px] text-[#cccccc] font-mono"
+        style={{ paddingLeft: `${depth * 16 + 4}px` }}
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          className={`shrink-0 transition-transform ${expanded ? "rotate-90" : ""}`}
+        >
+          <path d="M6 4l4 4-4 4" />
+        </svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" className="shrink-0" fill={expanded ? "#dcb67a" : "#c09553"}>
+          {expanded ? (
+            <path d="M1.5 14h13l-1.5-8H7L5.5 4H1.5v10z" />
+          ) : (
+            <path d="M1.5 2.5v11h13v-8.5H7L5.5 2.5H1.5z" />
+          )}
+        </svg>
+        <span className="truncate">{folder.name}</span>
+      </button>
+      {expanded && (
+        <div>
+          {folder.children.map((child) => (
+            <TreeNodeComponent key={isFile(child) ? child.id : (child as VirtualFolder).path} node={child} depth={depth + 1} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
-function ChevronIcon({ open }: { open: boolean }) {
-  return (
-    <motion.svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="currentColor"
-      animate={{ rotate: open ? 90 : 0 }}
-      transition={{ duration: 0.15 }}
-      className="shrink-0"
-    >
-      <path d="M6 4l4 4-4 4" />
-    </motion.svg>
-  );
-}
-
-function FolderIcon({ open }: { open: boolean }) {
-  if (open) {
-    return (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="#dcb67a">
-        <path d="M1.5 13.5V3a1 1 0 0 1 1-1h3.29a1 1 0 0 1 .7.29L7.71 3.5H13a1 1 0 0 1 1 1V5H3.5L2 13h11.5l1.5-7H3.5" />
-      </svg>
-    );
-  }
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="#dcb67a">
-      <path d="M1.5 13V3a1 1 0 0 1 1-1h3.29a1 1 0 0 1 .7.29L7.71 3.5H13.5a1 1 0 0 1 1 1V13a1 1 0 0 1-1 1H2.5a1 1 0 0 1-1-1z" />
-    </svg>
-  );
-}
-
-function FileNode({ file }: { file: FileEntry }) {
-  const { activeTab, openFile } = useIDE();
+function FileNode({ file, depth }: { file: VirtualFile; depth: number }) {
+  const { openFile, activeTab } = useIDE();
   const isActive = activeTab === file.id;
+  const color = getIconColor(file.name);
 
   return (
     <button
       onClick={() => openFile(file.id)}
-      className={`w-full flex items-center gap-1.5 pl-6 pr-2 py-[3px] text-[13px] font-mono transition-colors truncate ${
-        isActive
-          ? "bg-[#37373d] text-white"
-          : "text-[#cccccc] hover:bg-[#2a2d2e]"
+      className={`w-full flex items-center gap-1.5 py-[2px] text-[13px] font-mono ${
+        isActive ? "bg-[#37373d] text-white" : "text-[#cccccc] hover:bg-[#2a2d2e]"
       }`}
+      style={{ paddingLeft: `${depth * 16 + 20}px` }}
     >
-      <FileIconSvg icon={file.icon} />
+      <svg width="14" height="14" viewBox="0 0 16 16" className="shrink-0">
+        <rect x="2" y="1" width="12" height="14" rx="1" fill="none" stroke={color} strokeWidth="1" />
+        <rect x="4" y="4" width="8" height="1" fill={color} opacity="0.5" />
+        <rect x="4" y="7" width="6" height="1" fill={color} opacity="0.5" />
+        <rect x="4" y="10" width="7" height="1" fill={color} opacity="0.5" />
+      </svg>
       <span className="truncate">{file.name}</span>
     </button>
   );
 }
 
-function FolderNode({ name, files }: { name: string; files: FileEntry[] }) {
-  const [open, setOpen] = useState(true);
-
-  return (
-    <div>
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-1 pl-2 pr-2 py-[3px] text-[13px] font-mono text-[#cccccc] hover:bg-[#2a2d2e] transition-colors"
-      >
-        <ChevronIcon open={open} />
-        <FolderIcon open={open} />
-        <span className="truncate">{name}</span>
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="overflow-hidden"
-          >
-            {files.map((file) => (
-              <div key={file.id} className="pl-3">
-                <FileNode file={file} />
-              </div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+function TreeNodeComponent({ node, depth }: { node: TreeNode; depth: number }) {
+  if (isFolder(node)) {
+    return <FolderNode folder={node} depth={depth} />;
+  }
+  return <FileNode file={node as VirtualFile} depth={depth} />;
 }
 
 export function FileTree() {
-  const { root, folders } = getFilesByFolder();
-
   return (
-    <div className="py-1">
-      {/* Root files first that come before src folder */}
-      {root.filter((f) => f.id === "readme").map((file) => (
-        <FileNode key={file.id} file={file} />
-      ))}
-
-      {/* Folders */}
-      {folders.map((folder) => (
-        <FolderNode key={folder.name} name={folder.name} files={folder.files} />
-      ))}
-
-      {/* Root files after folders */}
-      {root.filter((f) => f.id !== "readme").map((file) => (
-        <FileNode key={file.id} file={file} />
+    <div className="py-1 text-[13px]">
+      <div className="flex items-center gap-1.5 px-4 py-1 text-[11px] font-mono text-[#cccccc] uppercase tracking-wide font-semibold">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" className="rotate-90">
+          <path d="M6 4l4 4-4 4" />
+        </svg>
+        dhairya.portfolio
+      </div>
+      {fileTree.children.map((child) => (
+        <TreeNodeComponent
+          key={isFile(child) ? (child as VirtualFile).id : (child as VirtualFolder).path}
+          node={child}
+          depth={1}
+        />
       ))}
     </div>
   );

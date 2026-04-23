@@ -1,0 +1,37 @@
+# Rivo Careers
+
+**Role:** Co-Founder
+**Period:** November 2025 to present
+**Stack:** Next.js, TypeScript, Tailwind, Supabase, Python, FastAPI, WebRTC
+
+## What it is
+
+Rivo Careers is a career-tech platform for Canadian students and new grads. It covers six product domains: AI mock interviews, ML job matching, automated job aggregation, resume tools, application tracking, and career resources. I built the engineering and own the financial model.
+
+## The engineering
+
+### 64 API routes across 6 domains
+
+The platform runs on Next.js with a Supabase backend. The API surface covers authentication, job listings, user profiles, interview sessions, matching results, and admin tooling. Each domain has its own route group, middleware, and validation layer.
+
+### AI mock interview system
+
+The interview system pairs a lip-synced humanoid avatar with live speech transcription. The candidate speaks into their mic; the system transcribes in real time, runs the response through an evaluation pipeline, and scores across three categories: behavioral, technical, and communication. The avatar responds with follow-up questions calibrated to the role.
+
+The pipeline: WebRTC for media capture, speech-to-text for transcription, LLM for evaluation and follow-up generation, text-to-speech for avatar audio, and a lip-sync engine that maps phonemes to blend shapes on the avatar mesh.
+
+### Two-phase ML job matching engine
+
+Phase one: NLP-based resume scoring. The system embeds the candidate's resume using TF-IDF vectors, then computes cosine similarity against job description embeddings. This produces a raw relevance score for every listing.
+
+Phase two: behavioral signal blending. The system tracks which jobs the candidate views, saves, applies to, and dismisses. These signals feed a secondary scoring model that adjusts the NLP scores based on revealed preferences. The blend ratio is configurable per user via a strictness slider.
+
+### Automated job aggregation pipeline
+
+A daily pipeline sources internship listings from across the Canadian market, deduplicates against existing records, validates listing metadata (company, location, deadline, requirements), and flags expired or suspicious entries through a multi-layer expiry detection system. The goal: thousands of validated listings, refreshed daily, with minimal manual oversight.
+
+## The business
+
+I built the financial models that project unit economics, CAC/LTV ratios, and runway scenarios. These informed our pricing strategy and go-to-market decisions. I conducted market sizing across the North American career services landscape (multi-billion dollar TAM) and built the competitive positioning that differentiates us from incumbents.
+
+I present growth metrics, KPI performance, and strategic roadmaps to advisors and prospective investors.
